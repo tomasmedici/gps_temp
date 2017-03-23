@@ -1,5 +1,6 @@
 package com.example.gps_temp;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -35,6 +36,24 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_KOPHOLDER);
         onCreate(db);
+    }
+    //adding new kopholder(b,d,c)
+    public void addKopholder(Kopholder kopholder) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_BRAND, kopholder.getBrand());
+        values.put(KEY_DIAMETER, kopholder.getDiameter());
+        values.put(KEY_COLOUR, kopholder.getColour());
+        //inserting row
+        db.insert(TABLE_KOPHOLDER, null, values);
+        db.close(); //closing database connection
+    }
+    //getting single kopholder
+    public Kopholder getKopholder(String brand) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+
     }
 }
 
