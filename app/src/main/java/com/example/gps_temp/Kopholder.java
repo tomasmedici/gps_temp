@@ -37,7 +37,7 @@ public class Kopholder {
         this._brand = brand;
     }
     //setting diameter
-    public void setDiameter(int diameter) { this._diameter = diameter }
+    public void setDiameter(int diameter) { this._diameter = diameter; }
     //setting colour
-    public void  setColour(String colour) { this._colour = colour }
+    public void  setColour(String colour) { this._colour = colour; }
 }

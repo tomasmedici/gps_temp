@@ -2,9 +2,12 @@ package com.example.gps_temp;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.support.v7.app.AppCompatDialogFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by B004341 on 23-03-2017.
@@ -37,6 +40,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_KOPHOLDER);
         onCreate(db);
     }
+    //addKopholder()
     //adding new kopholder(b,d,c)
     public void addKopholder(Kopholder kopholder) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -45,14 +49,61 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_BRAND, kopholder.getBrand());
         values.put(KEY_DIAMETER, kopholder.getDiameter());
         values.put(KEY_COLOUR, kopholder.getColour());
-        //inserting row
-        db.insert(TABLE_KOPHOLDER, null, values);
+
+        db.insert(TABLE_KOPHOLDER, null, values);  //inserting row
         db.close(); //closing database connection
     }
+    //getKopholder()
     //getting single kopholder
     public Kopholder getKopholder(String brand) {
         SQLiteDatabase db = this.getReadableDatabase();
 
+        Cursor cursor = db.query(TABLE_KOPHOLDER, new String[] { KEY_BRAND,
+                        KEY_DIAMETER, KEY_COLOUR }, KEY_BRAND + "=?",
+                new String[] { String.valueOf(brand) }, null, null, null, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        Kopholder kopholder = new Kopholder(Integer.parseInt(cursor.getString(0)),
+                cursor.getString(1), cursor.getString(2));
+        // return contact
+        return kopholder;
+    }
+    //getAllKopholder
+    //getting all kopholder
+    public List<Kopholder> getAllKopholder() {
+        List<Kopholder> kopholderList = new ArrayList<Kopholder>();
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + TABLE_KOPHOLDER;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Kopholder kopholder = new Kopholder();
+                kopholder.setBrand(Integer.parseInt(cursor.getString(0)));
+                kopholder.setDiameter(cursor.getString(1));
+                kopholder.setColour(cursor.getString(2));
+                // Adding contact to list
+                kopholderList.add(kopholder);
+            } while (cursor.moveToNext());
+        }
+
+        // return contact list
+        return kopholderList;
+    }
+    //Getting Kopholder count
+    public int getKopholderCount() {
+
+    }
+    //Updating single Kopholder
+    public int updateKopholder(Kopholder kopholder) {
+
+    }
+    //Deleting single Kopholder
+    public void deleteKopholder(Kopholder kopholder) {
 
     }
 }
