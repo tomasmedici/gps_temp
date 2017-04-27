@@ -6,6 +6,7 @@ package com.example.gps_temp;
 
 public class Kopholder {
     //maerke
+    int _id;
     String _brand;
     int _diameter;
     String _colour;
@@ -15,10 +16,16 @@ public class Kopholder {
 
     }
     //constructor
-    public Kopholder(String brand, int diameter, String colour){
+    public Kopholder(int id, String brand, int diameter, String colour){
+        this._id = id;
         this._brand = brand;
         this._diameter = diameter;
         this._colour = colour;
+    }
+
+    //getting ID
+    public int getID() {
+        return this._id;
     }
     //getting brand
     public String getBrand(){
@@ -32,12 +39,20 @@ public class Kopholder {
     public String getColour(){
         return this._colour;
     }
+    //setting ID
+    public void setID (int id){
+        this._id = id;
+    }
     //setting brand
     public void setBrand(String brand){
         this._brand = brand;
     }
     //setting diameter
-    public void setDiameter(int diameter) { this._diameter = diameter; }
+    public void setDiameter(int diameter){
+        this._diameter = diameter;
+    }
     //setting colour
-    public void  setColour(String colour) { this._colour = colour; }
+    public void  setColour(String colour){
+        this._colour = colour;
+    }
 }

@@ -17,6 +17,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME   = "kopholderManager";
     private static final String TABLE_KOPHOLDER = "kopholder";
+    private static final String KEY_ID = "id";
     private static final String KEY_BRAND = "brand";
     private static final String KEY_DIAMETER = "diameter";
     private static final String KEY_COLOUR = "colour";
@@ -29,10 +30,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_KOPHOLDER_TABLE =
                 "CREATE TABLE " + TABLE_KOPHOLDER +
-                        "(" + KEY_BRAND +
-                        " INTEGER PRIMARY KEY," + KEY_DIAMETER +
-                        " TEXT," + KEY_COLOUR +
-                        " TEXT" + ")";
+                        "(" +
+                        KEY_ID + " INTEGER PRIMARY KEY," +
+                        KEY_BRAND + " TEXT," +
+                        KEY_DIAMETER + " TEXT," +
+                        KEY_COLOUR + " TEXT" + ")";
         db.execSQL(CREATE_KOPHOLDER_TABLE);
     }
     @Override
@@ -50,23 +52,24 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_DIAMETER, kopholder.getDiameter());
         values.put(KEY_COLOUR, kopholder.getColour());
 
-        db.insert(TABLE_KOPHOLDER, null, values);  //inserting row
+        db.insert(TABLE_KOPHOLDER, null, values); //inserting row
         db.close(); //closing database connection
     }
     //getKopholder()
     //getting single kopholder
 
-    public Kopholder getKopholder(int brand) {
+    public Kopholder getKopholder(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_KOPHOLDER, new String[] { KEY_BRAND,
-                        KEY_DIAMETER, KEY_COLOUR }, KEY_BRAND + "=?",
-                new String[] { String.valueOf(brand) }, null, null, null, null);
+        Cursor cursor = db.query(TABLE_KOPHOLDER, new String[] {
+                KEY_ID, KEY_BRAND, KEY_DIAMETER, KEY_COLOUR
+        }, KEY_ID + "=?",
+                new String[] { String.valueOf(id) }, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 
-        Kopholder kopholder = new Kopholder(cursor.getString(0),
-                Integer.parseInt(cursor.getString(1)), cursor.getString(2));
+        Kopholder kopholder = new Kopholder(Integer.parseInt(cursor.getString(0)),
+                cursor.getString(1),Integer.parseInt(cursor.getString(2)), cursor.getString(3));
         // return kopholder
         return kopholder;
     }
@@ -85,9 +88,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 Kopholder kopholder = new Kopholder();
-                kopholder.setBrand(cursor.getString(0));
-                kopholder.setDiameter(Integer.parseInt(cursor.getString(1)));
-                kopholder.setColour(cursor.getString(2));
+                kopholder.setID(Integer.parseInt(cursor.getString(0)));
+                kopholder.setBrand(cursor.getString(1));
+                kopholder.setDiameter(Integer.parseInt(cursor.getString(2)));
+                kopholder.setColour(cursor.getString(3));
                 // Adding contact to list
                 kopholderList.add(kopholder);
             } while (cursor.moveToNext());
@@ -116,15 +120,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_COLOUR, kopholder.getColour());
 
         // updating row
-        return db.update(TABLE_KOPHOLDER, values, KEY_BRAND + " = ?",
-                new String[] { String.valueOf(kopholder.getBrand()) });
+        return db.update(TABLE_KOPHOLDER, values, KEY_ID + " = ?",
+                new String[] { String.valueOf(kopholder.getID()) });
 
     }
     //Deleting single Kopholder
     public void deleteKopholder(Kopholder kopholder) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_KOPHOLDER, KEY_BRAND + " = ?",
-                new String[] {String.valueOf(kopholder.getBrand()) });
+        db.delete(TABLE_KOPHOLDER, KEY_ID + " = ?",
+                new String[] {String.valueOf(kopholder.getID()) });
         db.close();
 
     }
