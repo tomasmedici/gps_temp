@@ -23,6 +23,13 @@ public class Kopholder {
         this._colour = colour;
     }
 
+    //constructor
+    public Kopholder(String brand, int diameter, String colour){
+        this._brand = brand;
+        this._diameter = diameter;
+        this._colour = colour;
+    }
+
     //getting ID
     public int getID() {
         return this._id;
